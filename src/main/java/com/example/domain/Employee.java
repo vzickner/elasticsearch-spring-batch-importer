@@ -1,11 +1,17 @@
 package com.example.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import java.util.Date;
 
 /**
  * @author Valentin Zickner
  */
+@Document(indexName = "employees")
 public class Employee {
+
+    @Id
     private int empNo;
     private Date birthDate;
     private String firstName;
