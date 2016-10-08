@@ -1,5 +1,6 @@
 package com.example;
 
+import org.elasticsearch.rest.action.admin.indices.alias.delete.AliasesNotFoundException;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,15 @@ public class CreateIndexBatchletStep extends AbstractBatchlet {
 
     @Override
     public String process() throws Exception {
+        try {
+            AliasQuery removeAliasQuery = new AliasQuery();
+            removeAliasQuery.setAliasName("employees");
+            removeAliasQuery.setIndexName("employees-*");
+            elasticsearchTemplate.removeAlias(removeAliasQuery);
+        } catch (AliasesNotFoundException exception) {
+            // Ignore
+        }
+
         AliasQuery aliasQuery = new AliasQuery();
         aliasQuery.setAliasName("employees");
         aliasQuery.setIndexName("employees-" + runId);
