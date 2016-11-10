@@ -3,11 +3,8 @@ package com.example;
 import com.example.domain.Department;
 import com.example.domain.Employee;
 import com.example.domain.Gender;
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -18,12 +15,9 @@ import java.util.List;
 /**
  * @author Valentin Zickner
  */
-@Component
-@JobScope
-public class EmployeesItemReader extends JdbcCursorItemReader<Employee> {
+public class FlatEmployeesItemReader extends JdbcCursorItemReader<Employee> {
 
-    @Autowired
-    public EmployeesItemReader(DataSource dataSource) {
+    public FlatEmployeesItemReader(DataSource dataSource) {
         this.setSql("select * from employees " +
                 "left join dept_emp on employees.emp_no = dept_emp.emp_no " +
                 "left join departments on dept_emp.dept_no = departments.dept_no");
