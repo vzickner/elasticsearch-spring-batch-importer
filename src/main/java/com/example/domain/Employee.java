@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Valentin Zickner
@@ -18,6 +19,7 @@ public class Employee {
     private String lastName;
     private Gender gender;
     private Date hireDate;
+    private List<Department> departments;
 
     public int getEmpNo() {
         return empNo;
@@ -65,6 +67,14 @@ public class Employee {
 
     public void setHireDate(Date hireDate) {
         this.hireDate = hireDate;
+    }
+
+    public List<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<Department> departments) {
+        this.departments = departments;
     }
 
     @Override
