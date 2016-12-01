@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * @author Valentin Zickner
  */
-@Document(indexName = "employees")
+@Document(indexName = "employees", createIndex = false)
 public class Employee {
 
     @Id

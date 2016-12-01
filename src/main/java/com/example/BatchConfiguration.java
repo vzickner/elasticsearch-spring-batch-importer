@@ -6,6 +6,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.jsr.step.batchlet.BatchletAdapter;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -23,10 +24,11 @@ public class BatchConfiguration {
 
     @Bean
     public Job importJob(JobBuilderFactory jobBuilderFactory,
-                         Step importEmployeeStep) {
+                         Step importEmployeeStep, Step renameAliasStep) {
         return jobBuilderFactory.get("importJob")
                 .incrementer(new RunIdIncrementer())
                 .start(importEmployeeStep)
+                .next(renameAliasStep)
                 .build();
     }
 
@@ -38,6 +40,14 @@ public class BatchConfiguration {
                 .<Employee, Employee>chunk(1000)
                 .reader(employeeItemReader)
                 .writer(employeeItemWriter)
+                .build();
+    }
+
+    @Bean
+    public Step renameAliasStep(StepBuilderFactory stepBuilderFactory,
+                                CreateIndexBatchletStep createIndexBatchletStep) {
+        return stepBuilderFactory.get("renameAliasStep")
+                .tasklet(new BatchletAdapter(createIndexBatchletStep))
                 .build();
     }
 
